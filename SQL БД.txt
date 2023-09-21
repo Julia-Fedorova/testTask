@@ -1,0 +1,211 @@
+-- Table: public.category
+
+-- DROP TABLE IF EXISTS public.category;
+
+CREATE TABLE IF NOT EXISTS public.category
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    create_ts time without time zone,
+    updates_ts time without time zone,
+    delete_ts time without time zone,
+    name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    discription text COLLATE pg_catalog."default",
+    is_removed boolean NOT NULL,
+    CONSTRAINT category_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.category
+    OWNER to postgres;
+
+
+
+
+
+
+
+-- Table: public.customer
+
+-- DROP TABLE IF EXISTS public.customer;
+
+CREATE TABLE IF NOT EXISTS public.customer
+(
+    id bigint NOT NULL,
+    create_ts timestamp without time zone,
+    update_ts time without time zone,
+    delete_ts time without time zone,
+    is_removed boolean NOT NULL,
+    login character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    phone character varying(20) COLLATE pg_catalog."default",
+    email character varying(200) COLLATE pg_catalog."default",
+    adress_id bigint,
+    order_id bigint,
+    CONSTRAINT customer_pkey PRIMARY KEY (id),
+    CONSTRAINT order_fkey FOREIGN KEY (order_id)
+        REFERENCES public."order" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.customer
+    OWNER to postgres;
+
+
+
+
+-- Table: public.order
+
+-- DROP TABLE IF EXISTS public."order";
+
+CREATE TABLE IF NOT EXISTS public."order"
+(
+    id bigint NOT NULL,
+    cteate_ts time without time zone,
+    price_total numeric,
+    stock_id bigint NOT NULL,
+    sku_id bigint NOT NULL,
+    customer_id bigint NOT NULL,
+    total_quantity numeric,
+    CONSTRAINT order_pkey PRIMARY KEY (id),
+    CONSTRAINT customer_fkey FOREIGN KEY (customer_id)
+        REFERENCES public.customer (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT sku_fkey FOREIGN KEY (sku_id)
+        REFERENCES public."sku " (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT stock_fkey FOREIGN KEY (stock_id)
+        REFERENCES public.stock (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."order"
+    OWNER to postgres;
+
+
+
+
+
+
+
+-- Table: public.sku 
+
+-- DROP TABLE IF EXISTS public."sku ";
+
+CREATE TABLE IF NOT EXISTS public."sku "
+(
+    id bigint NOT NULL,
+    create_ts time without time zone,
+    update_ts time without time zone,
+    delete_ts time without time zone,
+    name character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    subcategory_id bigint NOT NULL,
+    stock_id bigint NOT NULL,
+    is_removed boolean NOT NULL,
+    price numeric NOT NULL,
+    CONSTRAINT "sku _pkey" PRIMARY KEY (name),
+    CONSTRAINT "id " UNIQUE (id),
+    CONSTRAINT stock_fkey FOREIGN KEY (stock_id)
+        REFERENCES public.stock (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT subcategory_fkey FOREIGN KEY (subcategory_id)
+        REFERENCES public.subcategory ("id ") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."sku "
+    OWNER to postgres;
+
+
+
+
+
+
+
+
+-- Table: public.sku 
+
+-- DROP TABLE IF EXISTS public."sku ";
+
+CREATE TABLE IF NOT EXISTS public."sku "
+(
+    id bigint NOT NULL,
+    create_ts time without time zone,
+    update_ts time without time zone,
+    delete_ts time without time zone,
+    name character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    subcategory_id bigint NOT NULL,
+    stock_id bigint NOT NULL,
+    is_removed boolean NOT NULL,
+    price numeric NOT NULL,
+    CONSTRAINT "sku _pkey" PRIMARY KEY (name),
+    CONSTRAINT "id " UNIQUE (id),
+    CONSTRAINT stock_fkey FOREIGN KEY (stock_id)
+        REFERENCES public.stock (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT subcategory_fkey FOREIGN KEY (subcategory_id)
+        REFERENCES public.subcategory ("id ") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."sku "
+    OWNER to postgres;
+
+
+
+
+
+
+
+
+-- Table: public.subcategory
+
+-- DROP TABLE IF EXISTS public.subcategory;
+
+CREATE TABLE IF NOT EXISTS public.subcategory
+(
+    "id " bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    create_ts time without time zone,
+    update_ts time without time zone,
+    delete_ts time without time zone,
+    name character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    is_removed boolean NOT NULL,
+    category_id bigint NOT NULL,
+    CONSTRAINT subcategory_pkey PRIMARY KEY ("id "),
+    CONSTRAINT category_fkey FOREIGN KEY (category_id)
+        REFERENCES public.category (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.subcategory
+    OWNER to postgres;
